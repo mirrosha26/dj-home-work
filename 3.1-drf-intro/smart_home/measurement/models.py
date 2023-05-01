@@ -14,4 +14,4 @@ class Measurement(models.Model):
 
     def __str__(self):
         return f'{self.temperature} ({self.created_at})'
-
+        
