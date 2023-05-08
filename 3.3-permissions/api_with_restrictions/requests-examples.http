@@ -2,20 +2,28 @@
 
 @baseUrl = http://localhost:8000/api
 
-GET {{baseUrl}}/advertisements/
+GET {{baseUrl}}/advertisements/favorites/
 Content-Type: application/json
+Authorization: Token 1eb140e940050503586dd0b9c2e63818c626d911
+
+
 
 ###
 
-# создание объявления
-POST {{baseUrl}}/advertisements/
+GET {{baseUrl}}/advertisements/
 Content-Type: application/json
-Authorization: Token ef1f85361c5415d9c8590b385205f2775253b8d9
+Authorization: Token 1eb140e940050503586dd0b9c2e63818c626d911
 
-{
-  "title": "Шкаф IKEA",
-  "description": "Срочно"
-}
+
+###
+
+
+#POST /api/v1/advertisements/{pk}/add_to_favorites/: для добавления объявления в избранное;
+#POST /api/v1/advertisements/{pk}/remove_from_favorites/: для удаления объявления из избранного.
+
+# создание объявления
+POST {{baseUrl}}/advertisements/38/add_to_favorites/
+Authorization: Token 1eb140e940050503586dd0b9c2e63818c626d911
 
 ###
 
@@ -45,5 +53,5 @@ Content-Type: application/json
 ###
 
 # удаление объявления
-DELETE {{baseUrl}}/advertisements/4/
+DELETE {{baseUrl}}/advertisements/8/
 Authorization: Token 1eb140e940050503586dd0b9c2e63818c626d911
