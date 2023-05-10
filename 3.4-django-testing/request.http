@@ -1,0 +1,6 @@
+# примеры API-запросов
+
+@baseUrl = http://localhost:8000/api
+
+
+GET {{baseUrl}}/v1/courses
