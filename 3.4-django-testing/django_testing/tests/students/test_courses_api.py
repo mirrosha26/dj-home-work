@@ -27,13 +27,10 @@ def course_factory():
 #проверяем запрос на получение курса
 @pytest.mark.django_db
 def test_first_course(client, course_factory, student_factory):
-    # Arrange
     students = student_factory(_quantity=10)
     student_ids = [student.pk for student in students]
     course = course_factory(_quantity=1, students=students)
-    # Act
     response = client.get(f"/api/v1/courses/{course[0].pk}/")
-    # Assert
     assert response.status_code == 200
     assert response.data['id'] == course[0].pk
     assert response.data['name'] == course[0].name
@@ -43,13 +40,10 @@ def test_first_course(client, course_factory, student_factory):
 #проверка получения списка курсов (list-логика):
 @pytest.mark.django_db
 def test_list_course(client, course_factory, student_factory):
-    # Arrange
     students = student_factory(_quantity=10)
     student_ids = [student.pk for student in students]
     courses = course_factory(_quantity=10,students=students)
-    # Act
     response = client.get(f"/api/v1/courses/")
-    # Assert
     assert response.status_code == 200
     for i, c in enumerate(courses):
         assert c.pk == response.data[i]['id']
@@ -60,14 +54,11 @@ def test_list_course(client, course_factory, student_factory):
 #проверка фильтрации списка курсов по id:
 @pytest.mark.django_db
 def test_get_filter_id_course(client, course_factory, student_factory):
-    # Arrange
     students = student_factory(_quantity=10)
     student_ids = [student.pk for student in students]
     courses = course_factory(_quantity=10,students=students)
-    # Act
     random_course = random.choice(courses)
     response = client.get(f'/api/v1/courses/?id={random_course.pk}')
-    # Assert
     assert response.status_code == 200
     assert response.data[0]['id'] == random_course.pk
     assert response.data[0]['name'] == random_course.name
@@ -77,14 +68,11 @@ def test_get_filter_id_course(client, course_factory, student_factory):
 #проверка фильтрации списка курсов по name;
 @pytest.mark.django_db
 def test_get_filter_name_course(client, course_factory, student_factory):
-    # Arrange
     students = student_factory(_quantity=10)
     student_ids = [student.pk for student in students]
     courses = course_factory(_quantity=10,students=students)
-    #Act 
     random_course = random.choice(courses)
     response = client.get(f'/api/v1/courses/?name={random_course.name}')
-    # Assert
     assert response.status_code == 200
     data = response.json()
     for i, c in enumerate(data):
@@ -96,12 +84,9 @@ def test_get_filter_name_course(client, course_factory, student_factory):
 #тест успешного создания курса:
 @pytest.mark.django_db
 def test_post_course(client, student_factory):
-    # Arrange
     students = student_factory(_quantity=3)
     student_ids = [student.pk for student in students]
-    #Act 
     response = client.post('/api/v1/courses/', data={'name': 'mirrosha_test', 'students': student_ids}, format='json')
-    # Assert
     assert response.status_code == 201
     assert response.data['name'] == 'mirrosha_test'
     assert set(response.data['students']) == set(student_ids)
@@ -110,11 +95,9 @@ def test_post_course(client, student_factory):
 #тест успешного обновления курса:
 @pytest.mark.django_db
 def test_patch_course(client, course_factory, student_factory):
-    # Arrange
     students = student_factory(_quantity=3)
     student_ids = [student.pk for student in students]
     course = course_factory(_quantity=1,students=students)
-    #Act 
     response = client.patch(f'/api/v1/courses/{course[0].pk}/', data={'name': 'mirrosha_course', 'students' : student_ids[:1]}, format='json')
     assert response.status_code == 200
     assert response.data['name'] == 'mirrosha_course'
